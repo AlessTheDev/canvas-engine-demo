@@ -8,22 +8,14 @@ export default abstract class GameObject{
     width: number;
     height: number;
 
-    private InitFn: Function;
-    
-    public get initFn() : Function {
-        return this.InitFn;
-    }
-
     private components: Component<GameObject>[] = [];
 
-    constructor(x: number, y: number, width: number, height: number, initFn: Function){
+    constructor(x: number, y: number, width: number, height: number){
         this.x = x;
         this.y = y;
 
         this.width = width;
         this.height = height;
-
-        this.InitFn = initFn;
     }
 
     /**
@@ -47,4 +39,10 @@ export default abstract class GameObject{
     runComponents(){
         this.components.forEach((component: Component<GameObject>) => component.update(this));
     }
+
+    getComponent<T extends Component<any>>(componentClass: new (...args: any[]) => T): T | undefined {
+        return this.components.find(component => component instanceof componentClass) as T | undefined;
+    }
+    
+    
 }

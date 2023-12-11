@@ -1,3 +1,4 @@
+import GameObject from "./GameObject";
 import Scene from "./Scene";
 import DefaultScene from "./default_gameobjects/DefaultScene";
 
@@ -31,5 +32,14 @@ export default class SceneManager{
         this.activeScene.drop();
         this.ActiveScene = scene;
         scene.init();
+    }
+
+    static debugObject(obj: GameObject) {
+        const c = SceneManager.instance.activeScene.context;
+        c?.beginPath();
+        c?.arc(obj.x, obj.y, obj.width, 0, Math.PI * 2, false);
+        c!.fillStyle = "white";
+        c?.fill();
+        c?.closePath();
     }
 }

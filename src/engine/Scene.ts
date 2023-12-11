@@ -83,4 +83,8 @@ export default class Scene {
     getCanvasHeight(){
         return this.canvas.height;
     }
+
+    getObjects(): GameObject[]{
+        return this.objects;
+    }
 }
