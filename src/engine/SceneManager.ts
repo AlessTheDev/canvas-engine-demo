@@ -2,6 +2,10 @@ import GameObject from "./GameObject";
 import Scene from "./Scene";
 import DefaultScene from "./default_gameobjects/DefaultScene";
 
+/**
+ * This class manages the scenes, you can use it to swap between scenes or get the active scene
+ * This class is a singleton so if you need to access it use SceneManager.instance
+ */
 export default class SceneManager{
     private static Instance: SceneManager;
     
@@ -28,12 +32,30 @@ export default class SceneManager{
         this.activeScene.init();
     }
 
+    /**
+     * Swaps scenes
+     * @param scene the scene you want to assign
+     */
     assignScene(scene: Scene){
         this.activeScene.drop();
         this.ActiveScene = scene;
         scene.init();
     }
 
+    /**
+     * Swaps scenes without calling the init function of the scene parameter 
+     * It can be used to resum already initialized scenes
+     * @param scene the scene you want to assign
+     */
+    assignSceneNoReset(scene: Scene){
+        this.activeScene.drop();
+        this.ActiveScene = scene;
+    }
+
+    /**
+     * Draws a circle based on the object width 
+     * @param obj the object to debug
+     */
     static debugObject(obj: GameObject) {
         const c = SceneManager.instance.activeScene.context;
         c?.beginPath();

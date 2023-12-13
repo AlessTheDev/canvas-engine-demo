@@ -1,11 +1,17 @@
 import GameObject from "./GameObject";
 import { removeFromArray } from "./utils";
 
+/**
+ * Scene class
+ */
 export default class Scene {
     private canvas: HTMLCanvasElement;
     private Context: CanvasRenderingContext2D;
 
-    public get context() : CanvasRenderingContext2D {
+    /**
+     * The canvas context
+     */
+    public get context(): CanvasRenderingContext2D {
         return this.Context;
     }
 
@@ -31,11 +37,20 @@ export default class Scene {
         }
     }
 
+    /**
+     * Updates the canvas width based on the canvas parent element
+     */
     private resizeFlex() {
         this.canvas.width = this.canvas.parentElement?.clientWidth!;
         this.canvas.height = this.canvas.parentElement?.clientHeight!;
     }
 
+    /**
+     * Called every frame, 
+     * it clears the canvas, 
+     * removes the objects in the `objectToRemoveQueue`
+     * then it updates the objects and draw them
+     */
     update() {
         this.animationFrameId = requestAnimationFrame(this.update.bind(this));
 
@@ -56,35 +71,64 @@ export default class Scene {
         })
     }
 
+    /**
+     * Initializes the scene calling the initFunction, it can be used to reset
+     */
     init() {
-        this.initFn(this); 
-        
+        this.objects = [];
+        this.objectToRemoveQueue = [];
+        this.initFn(this);
+
         this.update();
     }
 
-    drop(){
-        if(this.animationFrameId){
+    /**
+     * Stops the scene from being played
+     * Warning: It doesn't delete the objects, to resume call `SceneManager.instance.assignSceneNoReset()`
+     */
+    drop() {
+        if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
         }
     }
 
-    add(obj: GameObject){
+    /**
+     * Adds an object to the scene
+     * @param obj the object to add
+     */
+    add(obj: GameObject) {
         this.objects.push(obj);
     }
 
-    remove(obj: GameObject){
-       removeFromArray<GameObject>(this.objects, obj);
+    /**
+     * Removes an object from the scene the next frame
+     * @param obj the object to remove
+     */
+    remove(obj: GameObject) {
+        this.objectToRemoveQueue.push(obj);
     }
 
-    getCanvasWidth(){
+    /**
+     * Returns the canvas width
+     * @returns the canvas width
+     */
+    getCanvasWidth() {
         return this.canvas.width;
     }
 
-    getCanvasHeight(){
+    /**
+     * Returns the canvas height
+     * @returns the canvas height
+     */
+    getCanvasHeight() {
         return this.canvas.height;
     }
 
-    getObjects(): GameObject[]{
+    /**
+     * Returns an array with all objects
+     * @returns an array with all objects
+     */
+    getObjects(): GameObject[] {
         return this.objects;
     }
 }

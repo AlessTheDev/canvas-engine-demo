@@ -1,6 +1,11 @@
 import GameObject from "./GameObject";
 import PhysicsObject from "./default_gameobjects/PhysicsObject";
 
+/**
+ * Removes an object from an array (error free)
+ * @param array the array
+ * @param obj the object to remove
+ */
 function removeFromArray<T>(array: Array<T>, obj: T) {
     const index = array.indexOf(obj);
 
@@ -9,6 +14,12 @@ function removeFromArray<T>(array: Array<T>, obj: T) {
     }
 }
 
+/**
+ * Calculate the distance between 2 GameObjects
+ * @param a The first GameObject
+ * @param b The second GameObject
+ * @returns 
+ */
 function distance(a: GameObject, b: GameObject) {
     const xDist = b.x - a.x;
     const yDist = b.y - a.y;
@@ -16,6 +27,12 @@ function distance(a: GameObject, b: GameObject) {
     return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
 }
 
+/**
+ * Random int between min inclusive and max exclusive
+ * @param min the min number of the range
+ * @param max the max number of the range
+ * @returns 
+ */
 function randomIntFromRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min)
 }
