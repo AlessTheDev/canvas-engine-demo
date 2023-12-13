@@ -1,5 +1,4 @@
 import GameObject from "./GameObject";
-import SceneManager from "./SceneManager";
 import PhysicsObject from "./default_gameobjects/PhysicsObject";
 
 function removeFromArray<T>(array: Array<T>, obj: T) {
@@ -18,7 +17,7 @@ function distance(a: GameObject, b: GameObject) {
 }
 
 function randomIntFromRange(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
+    return Math.floor(Math.random() * (max - min) + min)
 }
 
 //#region Object utils

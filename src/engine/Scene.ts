@@ -73,7 +73,7 @@ export default class Scene {
     }
 
     remove(obj: GameObject){
-        this.objectToRemoveQueue.push(obj);
+       removeFromArray<GameObject>(this.objects, obj);
     }
 
     getCanvasWidth(){

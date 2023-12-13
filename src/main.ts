@@ -1,32 +1,73 @@
 import Scene from "./engine/Scene";
 import SceneManager from "./engine/SceneManager";
 import Background from "./engine/default_gameobjects/Background";
+import { randomIntFromRange } from "./engine/utils";
 import FloatingObject from "./objects/FloatingObject";
 import Wave from "./objects/Wave";
+
+// Mouse
+const mouse = {
+    x: innerWidth / 2,
+    y: innerHeight / 2
+}
+
+addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+})
+
+// Scene
+const objectImages = [
+    "/objects/particle1.png",
+    "/objects/particle2.png",
+    "/objects/particle3.png",
+    "/objects/particle4.png",
+    "/objects/particle5.png",
+]
 
 const sceneManager = new SceneManager();
 
 const scene = new Scene(0, 0, sceneInit, true);
 sceneManager.assignScene(scene);
 
+let lastClick = Date.now();
+
 function sceneInit() {
     // Background
     const background = new Background(
-        "https://cdn.discordapp.com/attachments/1006500665842995261/1166077693993963550/9F20EFCD-6B39-4F27-92B5-C3084B026FA0.png?ex=65808c7a&is=656e177a&hm=fd42e6f01ace510e59d46a16fefbdba32b200ffc309ede220872f9f852a2d214&",
+        "/background.png",
         true
     );
     scene.add(background);
 
     // Wave
     const halfHeight = scene.getCanvasHeight() / 2;
-    const wave = new Wave(halfHeight + halfHeight / 2, 5, 25, 283);
+    const wave = new Wave(halfHeight + halfHeight / 2, 5, 20, 251);
     scene.add(wave);
 
-    //Object test
-    for (let i = 0; i < 100; i++) {
-        const obj = new FloatingObject(i * 100, 200, "https://cdn.discordapp.com/emojis/1019330059263299715.webp?size=96&quality=lossless", 50, 10);
+    //Spawn Initial Objects
+    const objectsToSpawn = 5;
+    for (let i = 0; i < objectsToSpawn; i++) {
+        const obj = new FloatingObject((i + 1) * (scene.getCanvasWidth() - 20) / (objectsToSpawn + 1), 50, objectImages[randomIntFromRange(0, objectImages.length)], 50, 4);
         scene.add(obj)
     }
 }
+
+//Adds an object every time you click on the screen
+addEventListener('click', () => {
+    if (Date.now() - lastClick > 100) {
+        addFloatingObject(mouse.x, mouse.y);
+    }
+})
+
+function addFloatingObject(x: number, y: number) {
+    const r = randomIntFromRange(50, 80);
+    const obj = new FloatingObject(x, y, objectImages[randomIntFromRange(0, objectImages.length)], r, r / 10 + 1);
+    scene.add(obj);
+}
+
+
+
+
 
 
