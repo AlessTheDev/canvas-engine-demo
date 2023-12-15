@@ -1,3 +1,6 @@
+/**
+ * Main component class
+ */
 export default abstract class Component<T> {
     enabled = true;
     constructor(){

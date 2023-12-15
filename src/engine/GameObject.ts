@@ -10,6 +10,13 @@ export default abstract class GameObject{
 
     private components: Component<GameObject>[] = [];
 
+    /**
+     * Create a GameObject
+     * @param x start x
+     * @param y start y
+     * @param width width
+     * @param height height 
+     */
     constructor(x: number, y: number, width: number, height: number){
         this.x = x;
         this.y = y;
@@ -32,14 +39,27 @@ export default abstract class GameObject{
         this.draw(scene);
     }
 
+    /**
+     * Adds a component to the object
+     * @param component the component to add
+     */
     useComponent(component: Component<GameObject>){
         this.components.push(component);
     }
 
+    /**
+     * Run all components, it's called automatically every frame
+     */
     runComponents(){
         this.components.forEach((component: Component<GameObject>) => component.update(this));
     }
 
+    /**
+     * Get a component of an object
+     * @param componentClass the class of that component
+     * @returns the component or undefined if it hasn't been found
+     * @example object.getComponent(ComponentClass)
+     */
     getComponent<T extends Component<any>>(componentClass: new (...args: any[]) => T): T | undefined {
         return this.components.find(component => component instanceof componentClass) as T | undefined;
     }

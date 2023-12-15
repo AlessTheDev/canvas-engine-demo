@@ -2,7 +2,6 @@ import GameObject from "../engine/GameObject";
 import Scene from "../engine/Scene";
 import SceneManager from "../engine/SceneManager";
 import CircleColliderComponent from "../engine/default_components/CircleColliderComponent";
-import EmptyGameObject from "../engine/default_gameobjects/EmptyGameObject";
 import PhysicsObject from "../engine/default_gameobjects/PhysicsObject";
 import { randomIntFromRange } from "../engine/utils";
 

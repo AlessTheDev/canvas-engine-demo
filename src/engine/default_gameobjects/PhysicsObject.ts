@@ -1,10 +1,12 @@
-import FloatingObject from "../../objects/FloatingObject";
 import GameObject from "../GameObject";
 import Scene from "../Scene";
 import SceneManager from "../SceneManager";
 import ColliderComponent from "../default_components/ColliderComponent";
 import { resolveCollision } from "../utils";
 
+/**
+ * Class to simulate simple physics (use only for simple stuff, or make your own)
+ */
 export default class PhysicsObject extends GameObject {
     velocity = {
         x: 0,
@@ -17,6 +19,10 @@ export default class PhysicsObject extends GameObject {
 
     staticMode: boolean;
 
+    /**
+     * @param mass the object mass
+     * @param staticMode if true, it won't be affected by gravity 
+     */
     constructor(x: number, y: number, width: number, height: number, mass: number, staticMode = false) {
         super(x, y, width, height);
         this.mass = mass;
@@ -38,13 +44,17 @@ export default class PhysicsObject extends GameObject {
             console.log("ERROR: the object doesn't have a collider");
             return;
         }
+
         const collisions = this.collider.getCollisions();
         if (collisions.length > 0) {
             this.handleCollisions(collisions);
         } else if (!this.staticMode) {
             this.velocity.y += 0.05;
         }
+
         if (this.staticMode) return;
+
+        // Bounce if it hits the canvas edge
         if (this.x <= 0 || this.x >= SceneManager.instance.activeScene.getCanvasWidth()) {
             this.velocity.x *= -1;
         }
@@ -58,6 +68,5 @@ export default class PhysicsObject extends GameObject {
 
         let collisionObject = collisions[0];
         resolveCollision(this, collisionObject as PhysicsObject);
-        //TODO! Respawn particles
     }
 }

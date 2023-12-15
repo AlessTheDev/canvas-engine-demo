@@ -1,9 +1,6 @@
 import GameObject from "./GameObject";
 import { removeFromArray } from "./utils";
 
-/**
- * Scene class
- */
 export default class Scene {
     private canvas: HTMLCanvasElement;
     private Context: CanvasRenderingContext2D;
@@ -22,6 +19,13 @@ export default class Scene {
 
     private animationFrameId: number | null = null;
 
+    /**
+     * Create a new scene
+     * @param width the initial width of the scene 
+     * @param height the initial height of the scene
+     * @param initFn the init functio which will be colled every time the scene is refreshed or initialized
+     * @param flex if true it will resize based on the parent element size
+     */
     constructor(width: number, height: number, initFn: Function, flex = false) {
         this.canvas = document.querySelector("canvas")!;
         this.Context = this.canvas.getContext("2d")!;

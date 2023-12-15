@@ -1,8 +1,17 @@
 import Scene from "../Scene";
 import SimpleImage from "./SimpleImage";
 
+/**
+ * Simple Background 
+ * @extends SimpleImage
+ */
 export default class Background extends SimpleImage{
     private cover: boolean;
+    /**
+     * 
+     * @param backgroundSrc the background image source
+     * @param cover if true it simulates css `cover` property
+     */
     constructor(backgroundSrc: string, cover = false){
         super(0, 0, 0, 0, backgroundSrc);
         this.cover = cover;

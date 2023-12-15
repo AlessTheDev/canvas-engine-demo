@@ -4,10 +4,18 @@ import GameObject from "../GameObject";
 import SceneManager from "../SceneManager";
 import { distance } from "../utils";
 
+/**
+ * Basic circle collider component
+ */
 export default class CircleColliderComponent extends Component<GameObject>{
     private assignedObject: GameObject;
     private radius: number;
 
+    /**
+     * 
+     * @param assignedObject the object assigned to (most of the time is `this`)
+     * @param radius the collider radius 
+     */
     constructor(assignedObject: GameObject, radius: number) {
         super();
         this.assignedObject = assignedObject;

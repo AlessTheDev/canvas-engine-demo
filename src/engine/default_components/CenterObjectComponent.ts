@@ -2,6 +2,9 @@ import Component from "../Component";
 import GameObject from "../GameObject";
 import SceneManager from "../SceneManager";
 
+/**
+ * Centers an object to the middle of the canvas
+ */
 export default class CenterObjectComponent extends Component<GameObject>{
     update(object: GameObject): void {
         const scene = SceneManager.instance.activeScene;
