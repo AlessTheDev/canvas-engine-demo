@@ -51,6 +51,10 @@ function sceneInit() {
         const obj = new FloatingObject((i + 1) * (scene.getCanvasWidth() - 20) / (objectsToSpawn + 1), 50, objectImages[randomIntFromRange(0, objectImages.length)], 50, 4);
         scene.add(obj)
     }
+
+    addEventListener("resize", () => {
+        wave.updateColliders();
+    })
 }
 
 //Adds an object every time you click on the screen

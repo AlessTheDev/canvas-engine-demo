@@ -30,6 +30,8 @@ export default class Wave extends GameObject {
     private time = 0;
     private timeIncrement = 0.1;
 
+    private scene: Scene | null = null;
+
     constructor(
         y: number,
         strokeThickness: number,
@@ -53,21 +55,9 @@ export default class Wave extends GameObject {
 
         this.gradualColor = gradual;
 
-        //Add Colliders to wave
-        let nextBallSize = randomIntFromRange(100, 120);
-        let nextBallPosX = nextBallSize - 100;
-        for (let i = 0; i < scene.getCanvasWidth() / 120 + 1; i++) {
-            let ballSize = nextBallSize;
-            nextBallSize = randomIntFromRange(100, 120);
+        this.scene = scene;
 
-            let ball = new PhysicsObject(nextBallPosX, y + 130, ballSize, ballSize, 1, true);
-            ball.assignCollider(new CircleColliderComponent(ball, ballSize));
-            scene.add(ball);
-
-            this.colliders.push(ball);
-
-            nextBallPosX += ballSize + nextBallSize / 2;
-        }
+        this.updateColliders();
     }
 
     draw(scene: Scene): void {
@@ -102,10 +92,35 @@ export default class Wave extends GameObject {
     }
 
     update(scene: Scene): void {
+        this.scene = scene;
+
         this.colliders.forEach((collider) => {
             collider.y += Math.sin(this.time) * 0.7;
             //SceneManager.debugObject(collider)
         })
-        this.time += this.timeIncrement
+        this.time += this.timeIncrement;
+    }
+
+    updateColliders() {
+        if(!this.scene) return;
+
+        this.colliders.forEach((c) => this.scene?.remove(c));
+        this.colliders = [];
+
+        //Add Colliders to wave
+        let nextBallSize = randomIntFromRange(100, 120);
+        let nextBallPosX = nextBallSize - 100;
+        for (let i = 0; i < this.scene.getCanvasWidth() / 120 + 1; i++) {
+            let ballSize = nextBallSize;
+            nextBallSize = randomIntFromRange(100, 120);
+
+            let ball = new PhysicsObject(nextBallPosX, this.y + 130, ballSize, ballSize, 1, true);
+            ball.assignCollider(new CircleColliderComponent(ball, ballSize));
+            this.scene.add(ball);
+
+            this.colliders.push(ball);
+
+            nextBallPosX += ballSize + nextBallSize / 2;
+        }
     }
 }

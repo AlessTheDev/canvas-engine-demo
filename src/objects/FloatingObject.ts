@@ -24,7 +24,7 @@ export default class FloatingObject extends PhysicsObject {
     }
 
     update(scene: Scene): void {
-        this.currentRotation += 0.1 * this.direction;
+        this.currentRotation += 0.2 * this.direction;
         super.update(scene);
     }
 
