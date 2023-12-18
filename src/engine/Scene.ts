@@ -19,6 +19,12 @@ export default class Scene {
 
     private animationFrameId: number | null = null;
 
+    private width: number;
+    private height: number;
+    private flex: boolean = false;
+
+    private active = false;
+
     /**
      * Create a new scene
      * @param width the initial width of the scene 
@@ -26,25 +32,26 @@ export default class Scene {
      * @param initFn the init functio which will be colled every time the scene is refreshed or initialized
      * @param flex if true it will resize based on the parent element size
      */
-    constructor(width: number, height: number, initFn: Function, flex = false) {
+    constructor(width: number, height: number, initFn: Function, flex: boolean = false) {
         this.canvas = document.querySelector("canvas")!;
         this.Context = this.canvas.getContext("2d")!;
-
-        this.canvas.width = width;
-        this.canvas.height = height;
-
+    
+        this.width = width;
+        this.height = height;
+    
         this.initFn = initFn;
-
+        this.flex = flex;
+    
         if (flex) {
-            this.resizeFlex();
             window.addEventListener("resize", () => this.resizeFlex());
         }
-    }
+    }    
 
     /**
      * Updates the canvas width based on the canvas parent element
      */
     private resizeFlex() {
+        if(!this.active) return;
         this.canvas.width = this.canvas.parentElement?.clientWidth!;
         this.canvas.height = this.canvas.parentElement?.clientHeight!;
     }
@@ -56,6 +63,8 @@ export default class Scene {
      * then it updates the objects and draw them
      */
     update() {
+        if(!this.active) return;
+        
         this.animationFrameId = requestAnimationFrame(this.update.bind(this));
 
         // Clear scene
@@ -79,6 +88,15 @@ export default class Scene {
      * Initializes the scene calling the initFunction, it can be used to reset
      */
     init() {
+        this.active = true;
+
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+
+        if(this.flex){
+            this.resizeFlex();
+        }
+
         this.objects = [];
         this.objectToRemoveQueue = [];
         this.initFn(this);
@@ -91,6 +109,8 @@ export default class Scene {
      * Warning: It doesn't delete the objects, to resume call `SceneManager.instance.assignSceneNoReset()`
      */
     drop() {
+        this.active = false;
+
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
         }
