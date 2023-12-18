@@ -28,11 +28,13 @@ const sceneManager = new SceneManager();
 
 This automatically displays a DefaultScene.
 
+![DefaultScene](https://github.com/AlessTheDev/canvas-engine-demo/assets/96922088/3a7ceb13-102f-4dfb-94cd-06ad181c8b7d)
+
 ### Create a Scene
 
 Create a new Scene:
 
-```tsx
+```ts
 const scene = new Scene(0, 0, sceneInit, true);
 ```
 
@@ -63,6 +65,9 @@ Assign the scene to the scene manager:
 sceneManager.assignScene(scene);
 ```
 
+Now you should see this:
+![BackgroundScene](https://github.com/AlessTheDev/canvas-engine-demo/assets/96922088/6ba1a2e4-2dc0-42ed-931d-acffbdafe254)
+
 ### Create GameObjects
 
 Creating your GameObjects is essential. For instance, let's create a circle object:
@@ -82,14 +87,18 @@ export default class Circle extends GameObject {
         c.closePath();
     }
 
-    private n: number;
+    private n: number = 0;
 
     update(scene: Scene): void {
-        this.x += Math.sin(this.n) * 5;
-        this.n += 1;
+        this.y += Math.sin(this.n) * 5;
+        this.n += 0.05;
     }
 }
 ```
+
+If we add the circle to the scene we should be able to see it!
+
+![CircleInTheCanvas](https://github.com/AlessTheDev/canvas-engine-demo/assets/96922088/a882c354-06ea-488b-8dfd-751d37e247ac)
 
 ### Components
 
@@ -108,7 +117,7 @@ export default class CenterObjectComponent extends Component<GameObject> {
 To add a component to your object, use the `useComponent` method:
 
 ```ts
-const text = new SimpleText(10, 50, "Default Scene");
+const text = new SimpleText(10, 50, "My Text");
 text.useComponent(new CenterObjectComponent());
 ```
 
