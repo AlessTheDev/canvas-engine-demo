@@ -11,13 +11,10 @@ Initially designed as a header for a website, this project evolved into a small 
 3. Execute `npm run dev` and open the provided link.
 
 > If you encounter any issues, ensure that TypeScript is installed.
-> 
 
 ## Can I Use it for a Personal Project?
 
 Absolutely! Download the source code or fork the project. Inside the "engine" folder, you'll find the main engine classes. The "objects" folder contains files used in the demo. Describe your scenes' behavior in the main file.
-
-> To create a scene with predefined width and height, use: new Scene(w, h, initFn).
 
 ## Tutorial
 
@@ -27,7 +24,6 @@ To use the engine, let's start by creating a SceneManager in the `main.ts` file:
 
 ```tsx
 const sceneManager = new SceneManager();
-
 ```
 
 This automatically displays a DefaultScene.
@@ -38,7 +34,6 @@ Create a new Scene:
 
 ```tsx
 const scene = new Scene(0, 0, sceneInit, true);
-
 ```
 
 The boolean value sets the flex property to automatically resize the canvas based on the parent element of the `<canvas>` HTML tag.
@@ -58,7 +53,6 @@ function sceneInit() {
     const background = new Background("/background.png", true);
     scene.add(background);
 }
-
 ```
 
 ### Display a Scene
@@ -67,7 +61,6 @@ Assign the scene to the scene manager:
 
 ```ts
 sceneManager.assignScene(scene);
-
 ```
 
 ### Create GameObjects
@@ -96,7 +89,6 @@ export default class Circle extends GameObject {
         this.n += 1;
     }
 }
-
 ```
 
 ### Components
@@ -111,7 +103,6 @@ export default class CenterObjectComponent extends Component<GameObject> {
         object.y = scene.getCanvasHeight() / 2 - (object.height / 2);
     }
 }
-
 ```
 
 To add a component to your object, use the `useComponent` method:
@@ -119,7 +110,6 @@ To add a component to your object, use the `useComponent` method:
 ```ts
 const text = new SimpleText(10, 50, "Default Scene");
 text.useComponent(new CenterObjectComponent());
-
 ```
 
 Keep in mind that the component's update methods get called after the object's update method:
@@ -131,5 +121,4 @@ this.objects.forEach((object: GameObject) => {
     object.runComponents();
     object.draw(this);
 })
-
 ```
