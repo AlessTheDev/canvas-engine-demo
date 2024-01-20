@@ -8,6 +8,8 @@ export default abstract class GameObject {
     width: number;
     height: number;
 
+    topLayerRendering = false;
+
     private components: Component<GameObject>[] = [];
     private _renderingLayer: number = 0;
 
@@ -18,8 +20,12 @@ export default abstract class GameObject {
     }
 
     set renderingLayer(value: number) {
+        if(this.topLayerRendering){
+            console.warn("This objects has topLayerRendering enabled, layers won't apply");
+            return;
+        }
         this._renderingLayer = value;
-        this.assignedScene?.sortLayersByLayers();
+        this.assignedScene?.sortObjectsByLayers();
     }
 
     /**
@@ -89,6 +95,8 @@ export default abstract class GameObject {
     */
     setScene(scene: Scene) {
         this.assignedScene = scene;
-        scene.sortLayersByLayers();
+        if(!this.topLayerRendering){
+            scene.sortObjectsByLayers();
+        }
     }
 }

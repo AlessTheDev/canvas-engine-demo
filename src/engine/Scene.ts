@@ -13,6 +13,7 @@ export default class Scene {
     }
 
     private objects: GameObject[] = [];
+    private topRenderingObjects: GameObject[] = [];
     private objectToRemoveQueue: GameObject[] = [];
 
     private initFn: Function;
@@ -35,23 +36,23 @@ export default class Scene {
     constructor(width: number, height: number, initFn: Function, flex: boolean = false) {
         this.canvas = document.querySelector("canvas")!;
         this.Context = this.canvas.getContext("2d")!;
-    
+
         this.width = width;
         this.height = height;
-    
+
         this.initFn = initFn;
         this.flex = flex;
-    
+
         if (flex) {
             window.addEventListener("resize", () => this.resizeFlex());
         }
-    }    
+    }
 
     /**
      * Updates the canvas width based on the canvas parent element
      */
     private resizeFlex() {
-        if(!this.active) return;
+        if (!this.active) return;
         this.canvas.width = this.canvas.parentElement?.clientWidth!;
         this.canvas.height = this.canvas.parentElement?.clientHeight!;
     }
@@ -63,8 +64,8 @@ export default class Scene {
      * then it updates the objects and draw them
      */
     update() {
-        if(!this.active) return;
-        
+        if (!this.active) return;
+
         this.animationFrameId = requestAnimationFrame(this.update.bind(this));
 
         // Clear scene
@@ -78,10 +79,19 @@ export default class Scene {
 
         // Update scene objects
         this.objects.forEach((object: GameObject) => {
-            object.update(this);
-            object.runComponents();
-            object.draw(this);
+            if (!object.topLayerRendering) {
+                this.runObject(object);
+            }
         })
+        this.topRenderingObjects.forEach((object: GameObject) => {
+            this.runObject(object);
+        })
+    }
+
+    private runObject(obj: GameObject) {
+        obj.update(this);
+        obj.runComponents();
+        obj.draw(this);
     }
 
     /**
@@ -93,7 +103,7 @@ export default class Scene {
         this.canvas.width = this.width;
         this.canvas.height = this.height;
 
-        if(this.flex){
+        if (this.flex) {
             this.resizeFlex();
         }
 
@@ -164,15 +174,25 @@ export default class Scene {
     /**
      * Updates the objects rendering queue, sorts by layer
      */
-    sortLayersByLayers(){
-        this.objects.sort((a: GameObject, b: GameObject) => { 
-            if(a.renderingLayer > b.renderingLayer){
+    sortObjectsByLayers() {
+        this.objects.sort((a: GameObject, b: GameObject) => {
+            if (a.renderingLayer > b.renderingLayer) {
                 return 1;
             }
-            if(a.renderingLayer > b.renderingLayer){
+            if (a.renderingLayer > b.renderingLayer) {
                 return -1;
             }
             return 0;
         });
+    }
+
+    /**
+     * Adds an object to the latest layer, gives better performance for objects that go on top
+     * @param obj the object to add
+     */
+    addTopRendering(obj: GameObject) {
+        obj.topLayerRendering = true;
+        this.add(obj);
+        this.topRenderingObjects.push(obj);
     }
 }

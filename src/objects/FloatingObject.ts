@@ -89,7 +89,7 @@ export default class FloatingObject extends PhysicsObject {
         let angleIncrement = 360 / n;
         const s = SceneManager.instance.activeScene;
         for (let i = 0; i < n; i++) {
-            s.add(new Particle(position, 5, angleIncrement * i, 5, "white", true));
+            s.addTopRendering(new Particle(position, 5, angleIncrement * i, 5, "white", true));
         }
     }
 
@@ -98,7 +98,7 @@ export default class FloatingObject extends PhysicsObject {
         const s = SceneManager.instance.activeScene;
         for (let i = 0; i < n; i++) {
             let angle = -90 + (angleIncrement * i);
-            s.add(new WaterParticle(position, 5, angle * 2));
+            s.addTopRendering(new WaterParticle(position, 5, angle * 2));
         }
     }
 
