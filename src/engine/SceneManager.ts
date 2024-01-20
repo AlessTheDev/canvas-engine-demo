@@ -1,6 +1,6 @@
 import GameObject from "./GameObject";
 import Scene from "./Scene";
-import DefaultScene from "./default_gameobjects/DefaultScene";
+import DefaultScene from "./DefaultScene";
 
 /**
  * This class manages the scenes, you can use it to swap between scenes or get the active scene
@@ -59,7 +59,7 @@ export default class SceneManager{
     static debugObject(obj: GameObject) {
         const c = SceneManager.instance.activeScene.context;
         c?.beginPath();
-        c?.arc(obj.x, obj.y, obj.width, 0, Math.PI * 2, false);
+        c?.arc(obj.position.x, obj.position.y, obj.width, 0, Math.PI * 2, false);
         c!.fillStyle = "white";
         c?.fill();
         c?.closePath();

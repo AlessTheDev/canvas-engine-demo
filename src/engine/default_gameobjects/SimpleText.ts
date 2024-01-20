@@ -1,5 +1,6 @@
 import GameObject from "../GameObject";
 import Scene from "../Scene";
+import Vector from "../Vector";
 
 /**
  * Simple Text to display
@@ -17,14 +18,14 @@ export default class SimpleText extends GameObject {
      * @param font font family
      * @param fontSize font size (48 by default)
      */
-    constructor(x: number, y: number, text: string, font: string = "sans-serif", fontSize: number = 48) {
-        super(x, y, fontSize / 2 * text.length, fontSize);
+    constructor(position: Vector, text: string, font: string = "sans-serif", fontSize: number = 48) {
+        super(position, fontSize / 2 * text.length, fontSize);
         this.text = text;
         this.font = font;
         this.fontSize = fontSize;
     }
     draw(scene: Scene): void {
         scene.context.font = `${this.fontSize}px ${this.font}`;
-        scene.context.fillText(this.text, this.x, this.y);
+        scene.context.fillText(this.text, this.position.x, this.position.y);
     }
 }

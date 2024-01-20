@@ -1,6 +1,7 @@
 import GameObject from "../GameObject";
 import Scene from "../Scene";
 import SceneManager from "../SceneManager";
+import Vector from "../Vector";
 import ColliderComponent from "../default_components/ColliderComponent";
 import { resolveCollision } from "../utils";
 
@@ -23,8 +24,8 @@ export default class PhysicsObject extends GameObject {
      * @param mass the object mass
      * @param staticMode if true, it won't be affected by gravity 
      */
-    constructor(x: number, y: number, width: number, height: number, mass: number, staticMode = false) {
-        super(x, y, width, height);
+    constructor(position: Vector, width: number, height: number, mass: number, staticMode = false) {
+        super(position, width, height);
         this.mass = mass;
 
         this.staticMode = staticMode;
@@ -55,12 +56,11 @@ export default class PhysicsObject extends GameObject {
         if (this.staticMode) return;
 
         // Bounce if it hits the canvas edge
-        if (this.x <= 0 || this.x >= SceneManager.instance.activeScene.getCanvasWidth()) {
+        if (this.position.x <= 0 || this.position.x >= SceneManager.instance.activeScene.getCanvasWidth()) {
             this.velocity.x *= -1;
         }
         //Movement
-        this.y += this.velocity.y;
-        this.x += this.velocity.x;
+        this.position = Vector.add(this.position, new Vector(this.velocity.x, this.velocity.y));
     }
 
     handleCollisions(collisions: GameObject[]): void {

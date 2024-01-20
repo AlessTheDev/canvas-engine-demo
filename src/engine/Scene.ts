@@ -101,6 +101,10 @@ export default class Scene {
         this.objectToRemoveQueue = [];
         this.initFn(this);
 
+        this.objects.forEach(o => {
+            o.init(this);
+        })
+
         this.update();
     }
 
@@ -121,6 +125,7 @@ export default class Scene {
      * @param obj the object to add
      */
     add(obj: GameObject) {
+        obj.setScene(this);
         this.objects.push(obj);
     }
 
@@ -154,5 +159,20 @@ export default class Scene {
      */
     getObjects(): GameObject[] {
         return this.objects;
+    }
+
+    /**
+     * Updates the objects rendering queue, sorts by layer
+     */
+    sortLayersByLayers(){
+        this.objects.sort((a: GameObject, b: GameObject) => { 
+            if(a.renderingLayer > b.renderingLayer){
+                return 1;
+            }
+            if(a.renderingLayer > b.renderingLayer){
+                return -1;
+            }
+            return 0;
+        });
     }
 }

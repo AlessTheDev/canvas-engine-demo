@@ -1,6 +1,7 @@
 import GameObject from "../engine/GameObject";
 import Scene from "../engine/Scene";
 import SceneManager from "../engine/SceneManager";
+import Vector from "../engine/Vector";
 import CircleColliderComponent from "../engine/default_components/CircleColliderComponent";
 import PhysicsObject from "../engine/default_gameobjects/PhysicsObject";
 import { distance, randomIntFromRange, resolveCollision } from "../engine/utils";
@@ -15,9 +16,11 @@ export default class FloatingObject extends PhysicsObject {
 
     private lastCollisionTime = Date.now();
 
-    constructor(spawnX: number, spawnY: number, imageSrc: string, size: number, mass: number) {
-        super(spawnX, spawnY, size, size, mass);
+    constructor(spawnPosition: Vector, imageSrc: string, size: number, mass: number) {
+        super(spawnPosition, size, size, mass);
         this.assignCollider(new CircleColliderComponent(this, size / 2));
+
+        this.renderingLayer = 1;
 
         this.image = new Image();
         this.image.src = imageSrc;
@@ -32,7 +35,7 @@ export default class FloatingObject extends PhysicsObject {
         scene.context.save();
 
         // Translate to the center of the object
-        scene.context.translate(this.x - this.width / 2, this.y - this.height / 2);
+        scene.context.translate(this.position.x - this.width / 2, this.position.y - this.height / 2);
 
         // Rotate around the center of the object
         scene.context.rotate(this.currentRotation * Math.PI / 180);
@@ -55,12 +58,16 @@ export default class FloatingObject extends PhysicsObject {
         if (collisions[0] instanceof FloatingObject) {
             resolveCollision(this, collisions[0]);
             if (Date.now() - this.lastCollisionTime >= 30) {
-                const pivotX1 = this.x - this.width / 2;
-                const pivotY1 = this.y - this.height / 2;
-
-                const pivotX2 = collisions[0].x - collisions[0].width / 2;
-                const pivotY2 = collisions[0].y - collisions[0].height / 2;
-                this.spawnParticles(pivotX1 - (pivotX1 - pivotX2), pivotY1 - (pivotY1 - pivotY2), 5);
+                const pivot1 = new Vector(
+                    this.position.x - this.width / 2,
+                    this.position.y - this.height / 2
+                );
+                const pivot2 = new Vector(
+                    collisions[0].position.x - collisions[0].width / 2,
+                    collisions[0].position.y - collisions[0].height / 2
+                );
+                // pivotX1 - (pivotX1 - pivotX2), pivotY1 - (pivotY1 - pivotY2)
+                this.spawnParticles(Vector.subtract(pivot1, Vector.subtract(pivot1, pivot2)), 5);
             }
 
             this.lastCollisionTime = Date.now();
@@ -68,30 +75,30 @@ export default class FloatingObject extends PhysicsObject {
         else {
             this.velocity.y = this.velocity.y * 0.8 - 1;
             this.velocity.x += distance(this, collisions[0]) / 4000 - this.velocity.x / 100;
-            this.direction = Math.sign(this.x - collisions[0].x) * randomIntFromRange(1, 3);
+            this.direction = Math.sign(this.position.x - collisions[0].position.x) * randomIntFromRange(1, 3);
 
             if (Date.now() - this.lastCollisionTime >= 30) {
-                this.spawnWaterParticles(this.x, this.y, 4);
+                this.spawnWaterParticles(this.position, 4);
             }
 
             this.lastCollisionTime = Date.now();
         }
     }
 
-    private spawnParticles(x: number, y: number, n: number) {
+    private spawnParticles(position: Vector, n: number) {
         let angleIncrement = 360 / n;
         const s = SceneManager.instance.activeScene;
         for (let i = 0; i < n; i++) {
-            s.add(new Particle(x, y, 5, angleIncrement * i, 5, "white", true));
+            s.add(new Particle(position, 5, angleIncrement * i, 5, "white", true));
         }
     }
 
-    private spawnWaterParticles(x: number, y: number, n: number) {
+    private spawnWaterParticles(position: Vector, n: number) {
         let angleIncrement = 180 / n;
         const s = SceneManager.instance.activeScene;
         for (let i = 0; i < n; i++) {
             let angle = -90 + (angleIncrement * i);
-            s.add(new WaterParticle(x, y, 5, angle * 2));
+            s.add(new WaterParticle(position, 5, angle * 2));
         }
     }
 

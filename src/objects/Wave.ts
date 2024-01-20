@@ -1,6 +1,7 @@
 import GameObject from "../engine/GameObject";
 import Scene from "../engine/Scene";
 import SceneManager from "../engine/SceneManager";
+import Vector from "../engine/Vector";
 import CircleColliderComponent from "../engine/default_components/CircleColliderComponent";
 import PhysicsObject from "../engine/default_gameobjects/PhysicsObject";
 import { randomIntFromRange } from "../engine/utils";
@@ -45,7 +46,7 @@ export default class Wave extends GameObject {
         gradual = true
     ) {
         const scene = SceneManager.instance.activeScene;
-        super(0, y, scene.getCanvasWidth(), scene.getCanvasHeight() - y);
+        super(new Vector(0, y), scene.getCanvasWidth(), scene.getCanvasHeight() - y);
 
         this.waveInfo = waveInfo;
 
@@ -65,11 +66,11 @@ export default class Wave extends GameObject {
 
         let colorChange = 0;
 
-        while (this.y + drawingY < scene.getCanvasHeight() + 20) {
+        while (this.position.y + drawingY < scene.getCanvasHeight() + 20) {
             // Draw wave line
             const ctx = scene.context;
             ctx.beginPath();
-            ctx.moveTo(0, this.y);
+            ctx.moveTo(0, this.position.y);
             ctx.lineWidth = this.strokeThickness;
 
             const { waveLength, amplitude } = this.waveInfo;
@@ -77,7 +78,7 @@ export default class Wave extends GameObject {
                 let val = Math.sin(i * waveLength + this.sinOffset) * amplitude;
                 // Add more turbulance
                 val *= Math.cos(this.sinOffset + Math.sin(this.turbulance) * -1) * this.turbulanceModifier;
-                ctx.rect(i, this.y + drawingY + val, this.rectThickness, this.rectThickness);
+                ctx.rect(i, this.position.y + drawingY + val, this.rectThickness, this.rectThickness);
             }
             ctx.strokeStyle = `hsl(${this.colorH}, 100%, ${Math.max(35, (90 - (colorChange * 15)))}%)`;
 
@@ -95,7 +96,7 @@ export default class Wave extends GameObject {
         this.scene = scene;
 
         this.colliders.forEach((collider) => {
-            collider.y += Math.sin(this.time) * 0.7;
+            collider.position = new Vector(collider.position.x, collider.position.y + Math.sin(this.time) * 0.7);
             //SceneManager.debugObject(collider)
         })
         this.time += this.timeIncrement;
@@ -114,7 +115,7 @@ export default class Wave extends GameObject {
             let ballSize = nextBallSize;
             nextBallSize = randomIntFromRange(100, 120);
 
-            let ball = new PhysicsObject(nextBallPosX, this.y + 130, ballSize, ballSize, 1, true);
+            let ball = new PhysicsObject(new Vector(nextBallPosX, this.position.y + 130), ballSize, ballSize, 1, true);
             ball.assignCollider(new CircleColliderComponent(ball, ballSize));
             this.scene.add(ball);
 

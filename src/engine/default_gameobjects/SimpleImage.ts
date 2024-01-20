@@ -1,5 +1,6 @@
 import GameObject from "../GameObject";
 import Scene from "../Scene";
+import Vector from "../Vector";
 
 /**
  * Simple image to display
@@ -19,13 +20,13 @@ export default class SimpleImage extends GameObject {
      * @param height the height of the image
      * @param src the image source url
      */
-    constructor(x: number, y: number, width: number, height: number, src: string) {
-        super(x, y, width, height);
+    constructor(position: Vector, width: number, height: number, src: string) {
+        super(position, width, height);
         this.Image = new Image();
         this.Image.src = src;
     }
     draw(scene: Scene): void {
-        scene.context.drawImage(this.Image, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        scene.context.drawImage(this.Image, this.position.x - this.width / 2, this.position.y - this.height / 2, this.width, this.height);
     }
 
     /**

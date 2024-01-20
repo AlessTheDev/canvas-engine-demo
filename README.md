@@ -17,6 +17,7 @@ Initially designed as a header for a website, this project evolved into a small 
 Absolutely! Download the source code or fork the project. Inside the "engine" folder, you'll find the main engine classes. The "objects" folder contains files used in the demo. Describe your scenes' behavior in the main file.
 
 ## Tutorial
+> WARINING: This tutorial is for version 1.0, one will come for version 2.0
 
 ### Scene Manager
 

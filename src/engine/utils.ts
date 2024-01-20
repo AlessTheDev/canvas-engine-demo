@@ -1,4 +1,5 @@
 import GameObject from "./GameObject";
+import Vector from "./Vector";
 import PhysicsObject from "./default_gameobjects/PhysicsObject";
 
 /**
@@ -21,10 +22,7 @@ function removeFromArray<T>(array: Array<T>, obj: T) {
  * @returns 
  */
 function distance(a: GameObject, b: GameObject) {
-    const xDist = b.x - a.x;
-    const yDist = b.y - a.y;
-
-    return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
+    return Vector.distance(a.position, b.position);
 }
 
 /**
@@ -35,6 +33,10 @@ function distance(a: GameObject, b: GameObject) {
  */
 function randomIntFromRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min)
+}
+
+function lerp(start: number, end: number, t: number): number {
+    return start * (1 - t) + end * t;
 }
 
 //#region Object utils
@@ -70,14 +72,14 @@ function resolveCollision(particle: PhysicsObject, otherParticle: PhysicsObject)
     const xVelocityDiff = particle.velocity.x - otherParticle.velocity.x;
     const yVelocityDiff = particle.velocity.y - otherParticle.velocity.y;
 
-    const xDist = otherParticle.x - particle.x;
-    const yDist = otherParticle.y - particle.y;
+    const xDist = otherParticle.position.x - particle.position.x;
+    const yDist = otherParticle.position.y - particle.position.y;
 
     // Prevent accidental overlap of particles
     if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
 
         // Grab angle between the two colliding particles
-        const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
+        const angle = -Math.atan2(xDist, yDist);
 
         // Store mass in var for better readability in collision equation
         const m1 = particle.mass;
@@ -105,4 +107,4 @@ function resolveCollision(particle: PhysicsObject, otherParticle: PhysicsObject)
 }
 //#endregion
 
-export { removeFromArray, distance, resolveCollision, rotate, randomIntFromRange }
+export { removeFromArray, distance, resolveCollision, rotate, randomIntFromRange, lerp }

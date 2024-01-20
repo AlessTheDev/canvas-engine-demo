@@ -1,14 +1,26 @@
 import Component from "./Component";
 import Scene from "./Scene";
+import Vector from "./Vector";
 
-export default abstract class GameObject{
-    x: number;
-    y: number;
-    
+export default abstract class GameObject {
+    position: Vector;
+
     width: number;
     height: number;
 
     private components: Component<GameObject>[] = [];
+    private _renderingLayer: number = 0;
+
+    private assignedScene: Scene | null = null;
+
+    public get renderingLayer(): number {
+        return this._renderingLayer;
+    }
+
+    set renderingLayer(value: number) {
+        this._renderingLayer = value;
+        this.assignedScene?.sortLayersByLayers();
+    }
 
     /**
      * Create a GameObject
@@ -17,12 +29,19 @@ export default abstract class GameObject{
      * @param width width
      * @param height height 
      */
-    constructor(x: number, y: number, width: number, height: number){
-        this.x = x;
-        this.y = y;
+    constructor(position: Vector, width: number, height: number) {
+        this.position = position;
 
         this.width = width;
         this.height = height;
+    }
+
+    /**
+     * Override this function to do init operations, called everytime the cene is assigned
+     * @param scene The scene assigned to the object
+     */
+    init(scene: Scene): void {
+
     }
 
     /**
@@ -43,14 +62,14 @@ export default abstract class GameObject{
      * Adds a component to the object
      * @param component the component to add
      */
-    useComponent(component: Component<GameObject>){
+    useComponent(component: Component<GameObject>) {
         this.components.push(component);
     }
 
     /**
      * Run all components, it's called automatically every frame
      */
-    runComponents(){
+    runComponents() {
         this.components.forEach((component: Component<GameObject>) => component.update(this));
     }
 
@@ -63,6 +82,13 @@ export default abstract class GameObject{
     getComponent<T extends Component<any>>(componentClass: new (...args: any[]) => T): T | undefined {
         return this.components.find(component => component instanceof componentClass) as T | undefined;
     }
-    
-    
+
+    /**
+    * Using this could cause unexpected behavouir
+    * @param scene 
+    */
+    setScene(scene: Scene) {
+        this.assignedScene = scene;
+        scene.sortLayersByLayers();
+    }
 }
