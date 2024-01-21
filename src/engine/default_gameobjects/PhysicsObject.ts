@@ -6,24 +6,42 @@ import ColliderComponent from "../default_components/ColliderComponent";
 import { resolveCollision } from "../utils";
 
 /**
- * Class to simulate simple physics (use only for simple stuff, or make your own)
+ * PhysicsObject Class
+ * 
+ * The `PhysicsObject` class extends the base `GameObject` class to simulate simple physics.
+ * It includes features such as velocity, mass, and collision handling. Use it for basic, not accurate physics simulations.
+ * 
+ * @extends GameObject
  */
 export default class PhysicsObject extends GameObject {
+    /**
+     * Object's velocity in the x and y directions.
+     */
     velocity = {
         x: 0,
         y: 0
     };
 
+    /**
+     * The mass of the object, affecting its response to forces.
+     */
     mass: number = 1;
+
+    /**
+     * Determines if the object is in static mode (not affected by gravity or collisions physics).
+     */
+    staticMode: boolean;
 
     private collider: ColliderComponent | null = null;
 
-    staticMode: boolean;
-
     /**
-     * @param mass the object mass
-     * @param staticMode if true, it won't be affected by gravity 
-     */
+    * Constructor for the PhysicsObject class.
+    * 
+    * @param position - The initial position of the physics object.
+    * @param scale - The initial scale of the physics object.
+    * @param mass - The mass of the object.
+    * @param staticMode - If true, the object won't be affected by gravity or collisions physics.
+    */
     constructor(position: Vector, scale: Vector, mass: number, staticMode = false) {
         super(position, scale);
         this.mass = mass;
@@ -59,10 +77,15 @@ export default class PhysicsObject extends GameObject {
         if (this.position.x <= 0 || this.position.x >= SceneManager.instance.activeScene.getCanvasWidth()) {
             this.velocity.x *= -1;
         }
-        //Movement
+        // Movement
         this.position = Vector.add(this.position, new Vector(this.velocity.x, this.velocity.y));
     }
 
+    /**
+     * Handles collisions with other objects.
+     * 
+     * @param collisions - An array of GameObjects that are colliding with the physics object.
+     */
     handleCollisions(collisions: GameObject[]): void {
         if (this.staticMode) return;
 

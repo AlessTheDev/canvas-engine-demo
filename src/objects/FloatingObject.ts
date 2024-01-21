@@ -18,7 +18,7 @@ export default class FloatingObject extends PhysicsObject {
 
     constructor(spawnPosition: Vector, imageSrc: string, size: number, mass: number) {
         super(spawnPosition, Vector.multiply(Vector.one, size), mass);
-        this.assignCollider(new CircleColliderComponent(this, size / 2));
+        this.assignCollider(new CircleColliderComponent(size / 2));
 
         this.renderingLayer = 1;
 

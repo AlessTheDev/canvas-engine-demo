@@ -3,19 +3,26 @@ import Vector from "../Vector";
 import SimpleImage from "./SimpleImage";
 
 /**
- * Simple Background 
+ * Background Class
+ * 
+ * The `Background` class represents a simple background image in a scene, 
+ * extending the `SimpleImage` class. 
+ * layer and simulate the CSS `cover` property for responsive scaling.
+ * 
  * @extends SimpleImage
  */
 export default class Background extends SimpleImage {
     private cover: boolean;
+
     /**
+     * Constructor for the Background class.
      * 
-     * @param backgroundSrc the background image source
-     * @param cover if true it simulates css `cover` property
+     * @param backgroundSrc - The background image source.
+     * @param cover - If true, it simulates the CSS `cover` property for responsive scaling.
      */
     constructor(backgroundSrc: string, cover = false) {
         super(Vector.zero, Vector.zero, backgroundSrc);
-        this.renderingLayer = -1;
+        this.renderingLayer = -10;
         this.cover = cover;
     }
     update(scene: Scene): void {

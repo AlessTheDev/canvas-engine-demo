@@ -79,7 +79,7 @@ function resolveCollision(particle: PhysicsObject, otherParticle: PhysicsObject)
     if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
 
         // Grab angle between the two colliding particles
-        const angle = -Math.atan2(xDist, yDist);
+        const angle = -Math.atan2(yDist, xDist);
 
         // Store mass in var for better readability in collision equation
         const m1 = particle.mass;

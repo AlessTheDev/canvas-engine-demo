@@ -3,13 +3,15 @@ import Scene from "./Scene";
 import DefaultScene from "./DefaultScene";
 
 /**
- * This class manages the scenes, you can use it to swap between scenes or get the active scene
- * This class is a singleton so if you need to access it use SceneManager.instance
+ * SceneManager Class
+ * 
+ * The `SceneManager` class manages scenes in the application, allowing the swapping of scenes and retrieval of the active scene.
+ * This class is implemented as a singleton, and its instance can be accessed using `SceneManager.instance`.
  */
-export default class SceneManager{
+export default class SceneManager {
     private static Instance: SceneManager;
-    
-    public static get instance() : SceneManager {
+
+    public static get instance(): SceneManager {
         return SceneManager.Instance;
     }
 
@@ -18,13 +20,18 @@ export default class SceneManager{
     }
 
     private ActiveScene: Scene = new DefaultScene();
-    
-    public get activeScene() : Scene {
+
+    public get activeScene(): Scene {
         return this.ActiveScene;
     }
 
-    constructor(){
-        if(SceneManager.Instance){
+    /**
+      * Constructor for the SceneManager class.
+      * Creates an instance of the SceneManager class and initializes the active scene.
+      * If an instance already exists, returns that instance.
+      */
+    constructor() {
+        if (SceneManager.Instance) {
             return SceneManager.Instance;
         }
 
@@ -33,28 +40,28 @@ export default class SceneManager{
     }
 
     /**
-     * Swaps scenes
-     * @param scene the scene you want to assign
+     * Swaps scenes.
+     * @param scene - The scene to be assigned as the active scene.
      */
-    assignScene(scene: Scene){
+    assignScene(scene: Scene) {
         this.activeScene.drop();
         this.ActiveScene = scene;
         scene.init();
     }
 
     /**
-     * Swaps scenes without calling the init function of the scene parameter 
-     * It can be used to resum already initialized scenes
-     * @param scene the scene you want to assign
+     * Swaps scenes without calling the init function of the scene parameter.
+     * It can be used to resume already initialized scenes.
+     * @param scene - The scene to be assigned as the active scene.
      */
-    assignSceneNoReset(scene: Scene){
+    assignSceneNoReset(scene: Scene) {
         this.activeScene.drop();
         this.ActiveScene = scene;
     }
 
     /**
-     * Draws a circle based on the object width 
-     * @param obj the object to debug
+     * Draws a debug circle based on the object width.
+     * @param obj - The object to be debugged.
      */
     static debugObject(obj: GameObject) {
         const c = SceneManager.instance.activeScene.context;

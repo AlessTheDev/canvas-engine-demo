@@ -116,7 +116,7 @@ export default class Wave extends GameObject {
             nextBallSize = randomIntFromRange(100, 120);
 
             let ball = new PhysicsObject(new Vector(nextBallPosX, this.position.y + 130), Vector.multiply(Vector.one, ballSize), 1, true);
-            ball.assignCollider(new CircleColliderComponent(ball, ballSize));
+            ball.assignCollider(new CircleColliderComponent(ballSize));
             this.scene.add(ball);
 
             this.colliders.push(ball);

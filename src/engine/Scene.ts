@@ -1,6 +1,11 @@
 import GameObject from "./GameObject";
 import { removeFromArray } from "./utils";
 
+/**
+ * Scene Class
+ * 
+ * The `Scene` class represents a container for game objects and manages their rendering and updates.
+ */
 export default class Scene {
     private canvas: HTMLCanvasElement;
     private Context: CanvasRenderingContext2D;
@@ -27,12 +32,13 @@ export default class Scene {
     private active = false;
 
     /**
-     * Create a new scene
-     * @param width the initial width of the scene 
-     * @param height the initial height of the scene
-     * @param initFn the init functio which will be colled every time the scene is refreshed or initialized
-     * @param flex if true it will resize based on the parent element size
-     */
+      * Creates a new scene.
+      * 
+      * @param width - The initial width of the scene.
+      * @param height - The initial height of the scene.
+      * @param initFn - The initialization function called every time the scene is refreshed or initialized.
+      * @param flex - If true, the scene will resize based on the parent element size.
+      */
     constructor(width: number, height: number, initFn: Function, flex: boolean = false) {
         this.canvas = document.querySelector("canvas")!;
         this.Context = this.canvas.getContext("2d")!;
@@ -58,10 +64,9 @@ export default class Scene {
     }
 
     /**
-     * Called every frame, 
-     * it clears the canvas, 
-     * removes the objects in the `objectToRemoveQueue`
-     * then it updates the objects and draw them
+     * Called every frame.
+     * It clears the canvas, removes the objects in the `objectToRemoveQueue`,
+     * then it updates the objects and draws them.
      */
     update() {
         if (!this.active) return;
@@ -89,15 +94,16 @@ export default class Scene {
     }
 
     private runObject(obj: GameObject) {
-        if(!obj.active) return;
+        if (!obj.active) return;
         obj.update(this);
         obj.runComponents();
         obj.draw(this);
     }
 
     /**
-     * Initializes the scene calling the initFunction, it can be used to reset
-     */
+      * Initializes the scene calling the initFunction.
+      * It can be used to reset.
+      */
     init() {
         this.active = true;
 
@@ -114,6 +120,7 @@ export default class Scene {
 
         this.objects.forEach(o => {
             o.init(this);
+            o.initComponents(this);
         })
 
         this.update();
@@ -132,8 +139,9 @@ export default class Scene {
     }
 
     /**
-     * Adds an object to the scene
-     * @param obj the object to add
+     * Adds an object to the scene.
+     * 
+     * @param obj - The object to add.
      */
     add(obj: GameObject) {
         obj.setScene(this);
@@ -141,33 +149,37 @@ export default class Scene {
     }
 
     /**
-     * Removes an object from the scene the next frame
-     * @param obj the object to remove
+     * Removes an object from the scene in the next frame.
+     * 
+     * @param obj - The object to remove.
      */
     remove(obj: GameObject) {
         this.objectToRemoveQueue.push(obj);
     }
 
     /**
-     * Returns the canvas width
-     * @returns the canvas width
-     */
+    * Returns the canvas width.
+    * 
+    * @returns The canvas width.
+    */
     getCanvasWidth() {
         return this.canvas.width;
     }
 
     /**
-     * Returns the canvas height
-     * @returns the canvas height
+     * Returns the canvas height.
+     * 
+     * @returns The canvas height.
      */
     getCanvasHeight() {
         return this.canvas.height;
     }
 
     /**
-     * Returns an array with all objects
-     * @returns an array with all objects
-     */
+    * Returns an array with all objects.
+    * 
+    * @returns An array with all objects.
+    */
     getObjects(): GameObject[] {
         return this.objects;
     }
@@ -188,8 +200,11 @@ export default class Scene {
     }
 
     /**
-     * Adds an object to the latest layer, gives better performance for objects that go on top
-     * @param obj the object to add
+     * Adds an object to the latest layer, giving better performance for objects that go on top.
+     * 
+     * Use this for particles or large quantity of objects.
+     * 
+     * @param obj - The object to add.
      */
     addTopRendering(obj: GameObject) {
         obj.topLayerRendering = true;
