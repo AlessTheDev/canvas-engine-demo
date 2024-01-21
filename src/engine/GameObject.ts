@@ -5,8 +5,7 @@ import Vector from "./Vector";
 export default abstract class GameObject {
     position: Vector;
 
-    width: number;
-    height: number;
+    scale: Vector;
 
     topLayerRendering = false;
 
@@ -37,11 +36,9 @@ export default abstract class GameObject {
      * @param width width
      * @param height height 
      */
-    constructor(position: Vector, width: number, height: number) {
+    constructor(position: Vector, scale: Vector) {
         this.position = position;
-
-        this.width = width;
-        this.height = height;
+        this.scale = scale;
     }
 
     /**

@@ -24,8 +24,8 @@ export default class PhysicsObject extends GameObject {
      * @param mass the object mass
      * @param staticMode if true, it won't be affected by gravity 
      */
-    constructor(position: Vector, width: number, height: number, mass: number, staticMode = false) {
-        super(position, width, height);
+    constructor(position: Vector, scale: Vector, mass: number, staticMode = false) {
+        super(position, scale);
         this.mass = mass;
 
         this.staticMode = staticMode;

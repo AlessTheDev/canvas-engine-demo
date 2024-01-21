@@ -15,7 +15,7 @@ export default class Particle extends GameObject{
     resizeDelay = 50;
 
     constructor(position: Vector, size: number, angle: number, speed: number, color: string = "white", changeSize = false, drag = 0.1) {
-        super(position, size, size);
+        super(position, Vector.multiply(Vector.one, size));
         
         this.renderingLayer = 2;
 
@@ -30,7 +30,7 @@ export default class Particle extends GameObject{
     draw(scene: Scene): void {
         const ctx = scene.context;
         ctx?.beginPath();
-        ctx?.arc(this.position.x, this.position.y, this.width, 0, Math.PI * 2, false);
+        ctx?.arc(this.position.x, this.position.y, this.scale.x, 0, Math.PI * 2, false);
         ctx!.fillStyle = this.color;
         ctx?.fill();
         ctx?.closePath();
@@ -39,9 +39,9 @@ export default class Particle extends GameObject{
     update(scene: Scene): void {
         this.position = Vector.add(this.position, new Vector(Math.cos(this.angle) * this.speed, Math.sin(this.angle) * this.speed));
 
-        this.setSize(this.width - (this.changeSize && Date.now() - this.spawnTime > this.resizeDelay ? 0.1 : 0))
-        if(this.width <= 0){
-            this.width = 0;
+        this.setSize(this.scale.x - (this.changeSize && Date.now() - this.spawnTime > this.resizeDelay ? 0.1 : 0))
+        if(this.scale.x <= 0){
+            this.scale = new Vector(0, this.scale.y)
             scene.remove(this);
         }
 
@@ -49,7 +49,6 @@ export default class Particle extends GameObject{
     }
 
     setSize(size: number){
-        this.height = size;
-        this.width = size;
+        this.scale = Vector.multiply(Vector.one, size)
     }
 }

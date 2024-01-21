@@ -19,7 +19,7 @@ export default class SimpleText extends GameObject {
      * @param fontSize font size (48 by default)
      */
     constructor(position: Vector, text: string, font: string = "sans-serif", fontSize: number = 48) {
-        super(position, fontSize / 2 * text.length, fontSize);
+        super(position, new Vector(fontSize / 2 * text.length, fontSize));
         this.text = text;
         this.font = font;
         this.fontSize = fontSize;

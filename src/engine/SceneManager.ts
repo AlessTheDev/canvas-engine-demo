@@ -59,7 +59,7 @@ export default class SceneManager{
     static debugObject(obj: GameObject) {
         const c = SceneManager.instance.activeScene.context;
         c?.beginPath();
-        c?.arc(obj.position.x, obj.position.y, obj.width, 0, Math.PI * 2, false);
+        c?.arc(obj.position.x, obj.position.y, obj.scale.x, 0, Math.PI * 2, false);
         c!.fillStyle = "white";
         c?.fill();
         c?.closePath();

@@ -11,8 +11,8 @@ export default class CenterObjectComponent extends Component<GameObject>{
         const scene = SceneManager.instance.activeScene;
 
         object.position = new Vector(
-            scene.getCanvasWidth() / 2 - (object.width / 2),
-            scene.getCanvasHeight() / 2 - (object.height / 2)
+            scene.getCanvasWidth() / 2 - (object.scale.x / 2),
+            scene.getCanvasHeight() / 2 - (object.scale.y / 2)
         )
     }
     

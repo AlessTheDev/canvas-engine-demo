@@ -59,6 +59,13 @@ export default class Vector {
         return new Vector(v.x / scalar, v.y / scalar);
     }
 
+    static divideVec(v1: Vector, v2: Vector): Vector {
+        return new Vector(v1.x / v2.x, v1.y / v2.y);
+    }
+    static multiplyVec(v1: Vector, v2: Vector): Vector {
+        return new Vector(v1.x * v2.x, v1.y * v2.y);
+    }
+
     /**
      * Linearly interpolates between two vectors.
      *

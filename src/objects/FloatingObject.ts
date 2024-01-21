@@ -17,7 +17,7 @@ export default class FloatingObject extends PhysicsObject {
     private lastCollisionTime = Date.now();
 
     constructor(spawnPosition: Vector, imageSrc: string, size: number, mass: number) {
-        super(spawnPosition, size, size, mass);
+        super(spawnPosition, Vector.multiply(Vector.one, size), mass);
         this.assignCollider(new CircleColliderComponent(this, size / 2));
 
         this.renderingLayer = 1;
@@ -35,13 +35,13 @@ export default class FloatingObject extends PhysicsObject {
         scene.context.save();
 
         // Translate to the center of the object
-        scene.context.translate(this.position.x - this.width / 2, this.position.y - this.height / 2);
+        scene.context.translate(this.position.x - this.scale.x / 2, this.position.y - this.scale.y / 2);
 
         // Rotate around the center of the object
         scene.context.rotate(this.currentRotation * Math.PI / 180);
 
         // Draw the image at the translated and rotated position
-        scene.context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+        scene.context.drawImage(this.image, -this.scale.x / 2, -this.scale.y / 2, this.scale.x, this.scale.y);
 
         // Restore the context to its original state
         scene.context.restore();
@@ -59,12 +59,12 @@ export default class FloatingObject extends PhysicsObject {
             resolveCollision(this, collisions[0]);
             if (Date.now() - this.lastCollisionTime >= 30) {
                 const pivot1 = new Vector(
-                    this.position.x - this.width / 2,
-                    this.position.y - this.height / 2
+                    this.position.x - this.scale.x / 2,
+                    this.position.y - this.scale.y / 2
                 );
                 const pivot2 = new Vector(
-                    collisions[0].position.x - collisions[0].width / 2,
-                    collisions[0].position.y - collisions[0].height / 2
+                    collisions[0].position.x - collisions[0].scale.x / 2,
+                    collisions[0].position.y - collisions[0].scale.y / 2
                 );
                 // pivotX1 - (pivotX1 - pivotX2), pivotY1 - (pivotY1 - pivotY2)
                 this.spawnParticles(Vector.subtract(pivot1, Vector.subtract(pivot1, pivot2)), 5);

@@ -14,7 +14,7 @@ export default class Background extends SimpleImage {
      * @param cover if true it simulates css `cover` property
      */
     constructor(backgroundSrc: string, cover = false) {
-        super(Vector.zero, 0, 0, backgroundSrc);
+        super(Vector.zero, Vector.zero, backgroundSrc);
         this.renderingLayer = -1;
         this.cover = cover;
     }
@@ -24,13 +24,11 @@ export default class Background extends SimpleImage {
             return;
         }
 
-        this.width = scene.getCanvasWidth();
-        this.height = scene.getCanvasHeight();
-
-        this.position = new Vector(
-            this.width / 2,
-            this.height / 2
-        );
+        this.scale = new Vector(
+            scene.getCanvasWidth(),
+            scene.getCanvasHeight()
+        )
+        this.position = Vector.divide(this.scale, 2);
     }
 
     private updateCover(scene: Scene): void {
@@ -42,13 +40,18 @@ export default class Background extends SimpleImage {
 
         if (canvasAspectRatio > imageAspectRatio) {
             // Canvas is wider than the image
-            this.width = canvasWidth;
-            this.height = canvasWidth / imageAspectRatio;
+            this.scale = new Vector(
+                canvasWidth,
+                canvasWidth / imageAspectRatio
+            )
         } else {
             // Canvas is taller than the image
-            this.height = canvasHeight;
-            this.width = canvasHeight * imageAspectRatio;
+            this.scale = new Vector(
+                canvasHeight * imageAspectRatio,
+                canvasHeight
+            );
         }
+        
 
         this.position = new Vector(
             canvasWidth / 2,

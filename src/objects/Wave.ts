@@ -46,7 +46,7 @@ export default class Wave extends GameObject {
         gradual = true
     ) {
         const scene = SceneManager.instance.activeScene;
-        super(new Vector(0, y), scene.getCanvasWidth(), scene.getCanvasHeight() - y);
+        super(new Vector(0, y), new Vector(scene.getCanvasWidth(), scene.getCanvasHeight() - y));
 
         this.waveInfo = waveInfo;
 
@@ -115,7 +115,7 @@ export default class Wave extends GameObject {
             let ballSize = nextBallSize;
             nextBallSize = randomIntFromRange(100, 120);
 
-            let ball = new PhysicsObject(new Vector(nextBallPosX, this.position.y + 130), ballSize, ballSize, 1, true);
+            let ball = new PhysicsObject(new Vector(nextBallPosX, this.position.y + 130), Vector.multiply(Vector.one, ballSize), 1, true);
             ball.assignCollider(new CircleColliderComponent(ball, ballSize));
             this.scene.add(ball);
 
