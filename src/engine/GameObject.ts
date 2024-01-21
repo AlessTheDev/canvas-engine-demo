@@ -15,6 +15,8 @@ export default abstract class GameObject {
 
     private assignedScene: Scene | null = null;
 
+    active: boolean = true;
+
     public get renderingLayer(): number {
         return this._renderingLayer;
     }
@@ -61,7 +63,7 @@ export default abstract class GameObject {
      * @param scene The scene assigned to the object
      */
     update(scene: Scene) {
-        this.draw(scene);
+        
     }
 
     /**

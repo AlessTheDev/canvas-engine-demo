@@ -89,6 +89,7 @@ export default class Scene {
     }
 
     private runObject(obj: GameObject) {
+        if(!obj.active) return;
         obj.update(this);
         obj.runComponents();
         obj.draw(this);

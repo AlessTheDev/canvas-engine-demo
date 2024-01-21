@@ -107,4 +107,18 @@ function resolveCollision(particle: PhysicsObject, otherParticle: PhysicsObject)
 }
 //#endregion
 
-export { removeFromArray, distance, resolveCollision, rotate, randomIntFromRange, lerp }
+function drawCircle(ctx: CanvasRenderingContext2D, pos: Vector, radius: number, color: string = "black") {
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
+}
+function drawImage(ctx: CanvasRenderingContext2D, image: HTMLImageElement, pos: Vector, scale: Vector) {
+    ctx.drawImage(image, pos.x - scale.x / 2, pos.y - scale.y / 2, scale.x, scale.y);
+}
+
+
+
+
+export { removeFromArray, distance, resolveCollision, rotate, randomIntFromRange, lerp, drawCircle, drawImage }
