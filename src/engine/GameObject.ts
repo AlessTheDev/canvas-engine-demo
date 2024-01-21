@@ -132,6 +132,7 @@ export default abstract class GameObject {
 */
     setScene(scene: Scene) {
         this.assignedScene = scene;
+        this.initComponents(scene);
         if (!this.topLayerRendering) {
             scene.sortObjectsByLayers();
         }
