@@ -46,12 +46,12 @@ export default abstract class GameObject {
         return this._renderingLayer;
     }
 
-     /**
-     * Setter for the rendering layer property.
-     * If `topLayerRendering` is enabled, the warning is logged, and layers won't apply.
-     * 
-     * @param value - The new rendering layer value.
-     */
+    /**
+    * Setter for the rendering layer property.
+    * If `topLayerRendering` is enabled, the warning is logged, and layers won't apply.
+    * 
+    * @param value - The new rendering layer value.
+    */
     set renderingLayer(value: number) {
         if (this.topLayerRendering) {
             console.warn("This objects has topLayerRendering enabled, layers won't apply");
@@ -129,7 +129,7 @@ export default abstract class GameObject {
 
     /**
     * Using this could cause unexpected behavouir
-*/
+    */
     setScene(scene: Scene) {
         this.assignedScene = scene;
         this.initComponents(scene);

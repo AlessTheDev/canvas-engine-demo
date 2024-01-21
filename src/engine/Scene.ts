@@ -192,7 +192,7 @@ export default class Scene {
             if (a.renderingLayer > b.renderingLayer) {
                 return 1;
             }
-            if (a.renderingLayer > b.renderingLayer) {
+            if (a.renderingLayer < b.renderingLayer) {
                 return -1;
             }
             return 0;
