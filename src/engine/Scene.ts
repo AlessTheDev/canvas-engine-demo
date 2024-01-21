@@ -118,10 +118,11 @@ export default class Scene {
         this.objectToRemoveQueue = [];
         this.initFn(this);
 
-        this.objects.forEach(o => {
-            o.init(this);
-            o.initComponents(this);
-        })
+        // Works 
+        for(let i = 0; i < this.objects.length; i++){
+            this.objects[i].init(this);
+            this.objects[i].initComponents(this);
+        }
 
         this.update();
     }
@@ -144,8 +145,8 @@ export default class Scene {
      * @param obj - The object to add.
      */
     add(obj: GameObject) {
-        obj.setScene(this);
         this.objects.push(obj);
+        obj.setScene(this);
     }
 
     /**
