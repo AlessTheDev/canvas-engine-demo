@@ -57,6 +57,10 @@ export default abstract class GameObject {
             console.warn("This objects has topLayerRendering enabled, layers won't apply");
             return;
         }
+        if (!this.assignedScene) {
+            console.warn("Assigning the rendering layer before the scene is assigned could lead to unexpected behavouir\nUse the init function, or edit it after you add it to the scene");
+            return;
+        }
         this._renderingLayer = value;
         this.assignedScene?.sortObjectsByLayers();
     }
