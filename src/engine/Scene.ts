@@ -83,14 +83,14 @@ export default class Scene {
         this.objectToRemoveQueue = [];
 
         // Update scene objects
-        this.objects.forEach((object: GameObject) => {
-            if (!object.topLayerRendering) {
-                this.runObject(object);
+        for(let i = 0; i < this.objects.length; i++){
+            if (!this.objects[i].topLayerRendering) {
+                this.runObject(this.objects[i]);
             }
-        })
-        this.topRenderingObjects.forEach((object: GameObject) => {
-            this.runObject(object);
-        })
+        }
+        for(let i = 0; i < this.topRenderingObjects.length; i++){
+            this.runObject(this.topRenderingObjects[i]);
+        }
     }
 
     private runObject(obj: GameObject) {
@@ -117,12 +117,6 @@ export default class Scene {
         this.objects = [];
         this.objectToRemoveQueue = [];
         this.initFn(this);
-
-        // Works 
-        for(let i = 0; i < this.objects.length; i++){
-            this.objects[i].init(this);
-            this.objects[i].initComponents(this);
-        }
 
         this.update();
     }
